@@ -874,12 +874,14 @@ export default function App() {
               <h2 className="text-3xl font-bold text-gray-800 mb-4">Bienvenue chez La Finesse by Nourhen</h2>
               <h2 className="text-3xl font-bold text-gray-800 mb-4">مرحبًا بكم</h2>
               <p className="text-gray-600 text-lg">Découvrez nos services de beauté et prenez rendez-vous en ligne</p>
+              <p className="text-gray-600 text-lg">اكتشفوا خدماتنا للجمال وحجزوا موعدًا عبر الإنترنت</p>
             </div>
 
             {/* Promotions */}
             {activePromos.length > 0 && (
               <div className="bg-white rounded-lg shadow-lg p-6">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">🎉 Nos Promotions</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">🎉 عروضنا</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {activePromos.map(promo => (
                     <div key={promo.id} className="bg-gradient-to-br from-pink-50 to-rose-50 border-2 border-pink-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
@@ -900,6 +902,7 @@ export default function App() {
             {/* Services & Prices */}
             <div className="bg-white rounded-lg shadow-lg p-6">
               <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">💆 Nos Services & Tarifs</h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">💆 خدماتنا وأسعارنا</h2>
               {categories.map(category => (
                 <div key={category} className="mb-8">
                   <h3 className="text-xl font-semibold text-pink-600 mb-4">{category}</h3>
@@ -922,7 +925,7 @@ export default function App() {
 
             {/* Request Appointment */}
             <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">📅 Demander un Rendez-vous</h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">📅 Demander un Rendez-vous/طلب موعد</h2>
               <form onSubmit={handleAppointmentSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -1018,7 +1021,6 @@ export default function App() {
       <footer className="bg-gradient-to-r from-pink-500 to-rose-600 text-white mt-12 py-6">
         <div className="container mx-auto px-4 text-center">
           <p>© 2024 La Finesse by Nourhen - Centre de Beauté & Bien-être</p>
-          <p className="text-pink-100 text-sm mt-1">Mot de passe admin: admin123</p>
         </div>
       </footer>
     </div>
