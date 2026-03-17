@@ -872,6 +872,7 @@ export default function App() {
             {/* Hero Section */}
             <div className="bg-white rounded-lg shadow-lg p-8 text-center">
               <h2 className="text-3xl font-bold text-gray-800 mb-4">Bienvenue chez La Finesse by Nourhen</h2>
+              <h2 className="text-3xl font-bold text-gray-800 mb-4">مرحبًا بكم</h2>
               <p className="text-gray-600 text-lg">Découvrez nos services de beauté et prenez rendez-vous en ligne</p>
             </div>
 
