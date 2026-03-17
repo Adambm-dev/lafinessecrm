@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import { AppointmentsApi } from "../../api/appointmentsApi";
 
 export default function Planning() {
-  const [apps, setApps] = useState([]);
+  const [apps, setApps] = useState<any[]>([]);
 
   useEffect(() => {
-    AppointmentsApi.getAll().then(({ data }) => {
-      setApps(data || []);
-    });
+    AppointmentsApi.getAll().then(({ data }) => setApps(data || []));
   }, []);
 
   const grouped = apps.reduce((acc: any, app: any) => {
@@ -25,9 +23,9 @@ export default function Planning() {
           <h3 className="font-bold text-pink-600 mb-2">{date}</h3>
 
           <div className="space-y-2">
-            {grouped[date].map((app: any) => (
+            {grouped[date].map(app => (
               <div key={app.id} className="border p-3 rounded bg-gray-50">
-                <b>{app.time}</b> → {app.client_name}  
+                <b>{app.time}</b> → {app.client_name}
                 <p className="text-sm text-gray-500">{app.service_id}</p>
               </div>
             ))}
@@ -37,4 +35,3 @@ export default function Planning() {
     </div>
   );
 }
-``
