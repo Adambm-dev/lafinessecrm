@@ -284,25 +284,27 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-rose-100">
       {/* Header */}
-      <header className="bg-gradient-to-r from-pink-500 to-rose-600 text-white shadow-lg">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl font-bold">✨ La Finesse by Nourhen</h1>
-              <p className="text-pink-100 mt-1">Centre de Beauté & Bien-être</p>
-            </div>
-            <button
-              onClick={() => setShowPasswordModal(true)}
-              className="bg-white text-pink-600 px-4 py-2 rounded-full font-semibold hover:bg-pink-50 transition-colors flex items-center gap-2"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-              </svg>
-              Espace Admin
-            </button>
-          </div>
+     <header className="bg-gradient-to-r from-pink-500 to-rose-600 text-white shadow-lg">
+  <div className="container mx-auto px-4 py-6">
+    <div className="flex justify-between items-center">
+      <div className="flex items-center gap-3">
+        {/* Logo */}
+        <img src="/logo.png" alt="La Finesse" className="h-12 w-auto" />
+        <div>
+          <h1 className="text-3xl font-bold">✨ La Finesse by Nourhen</h1>
+          <p className="text-pink-100 mt-1">Centre de Beauté & Bien-être</p>
         </div>
-      </header>
+      </div>
+      <button
+        onClick={() => setShowPasswordModal(true)}
+        className="bg-white text-pink-600 px-4 py-2 rounded-full font-semibold hover:bg-pink-50 transition-colors flex items-center gap-2"
+      >
+        {/* ... icon ... */}
+        Espace Admin
+      </button>
+    </div>
+  </div>
+</header>
 
       {/* Password Modal */}
       {showPasswordModal && (
