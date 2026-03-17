@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { PromosApi } from "../../api/promosApi";
-
 export default function PromosAdmin() {
   const [promos, setPromos] = useState<any[]>([]);
   const [form, setForm] = useState({
@@ -10,7 +9,6 @@ export default function PromosAdmin() {
     valid_until: "",
     active: true,
   });
-
   const load = async () => {
     const { data } = await PromosApi.getAll();
     setPromos(data || []);
@@ -19,7 +17,6 @@ export default function PromosAdmin() {
   useEffect(() => {
     load();
   }, []);
-
   const save = async () => {
     await PromosApi.create(form);
     setForm({
@@ -31,7 +28,6 @@ export default function PromosAdmin() {
     });
     load();
   };
-
   return (
     <div>
       <h2 className="text-xl font-bold mb-4">Gestion des Promotions</h2>
@@ -61,10 +57,9 @@ export default function PromosAdmin() {
           onChange={(e) => setForm({ ...form, description: e.target.value })}
         />
       </div>
-      <button
+      <button>
         onClick={save}
         className="px-4 py-2 bg-green-600 text-white rounded"
-      >
         Ajouter
       </button>
       <ul className="mt-6">
