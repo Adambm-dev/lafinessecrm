@@ -30,6 +30,7 @@ export default function DashboardCards() {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+
       <div className="p-6 bg-white rounded shadow">
         <h3 className="text-gray-500">RDV Aujourd’hui</h3>
         <p className="text-3xl font-bold">{stats.appointmentsToday}</p>
@@ -44,6 +45,7 @@ export default function DashboardCards() {
         <h3 className="text-gray-500">Total Services</h3>
         <p className="text-3xl font-bold">{stats.servicesTotal}</p>
       </div>
+
     </div>
   );
 }
