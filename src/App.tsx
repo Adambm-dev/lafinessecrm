@@ -11,15 +11,16 @@ export default function App() {
   return (
     <BrowserRouter>
       <Header />
-      <main className="min-h-[80vh] px-4">
+
+      <main className="min-h-[80vh]">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>
       </main>
+
       <Footer />
     </BrowserRouter>
   );
 }
-``
