@@ -23,7 +23,8 @@ export default function AdminTabs() {
 
   return (
     <div className="p-6">
-      {/* TOP TABS */}
+
+      {/* TABS */}
       <div className="flex flex-wrap gap-3 mb-6">
         {tabs.map(t => (
           <button
@@ -40,7 +41,7 @@ export default function AdminTabs() {
         ))}
       </div>
 
-      {/* TAB CONTENT */}
+      {/* CONTENT */}
       {tab === "dashboard" && (
         <div>
           <DashboardCards />
