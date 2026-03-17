@@ -5,11 +5,13 @@ export default function PromosList() {
   const [promos, setPromos] = useState<any[]>([]);
 
   useEffect(() => {
-    PromosApi.getAll().then(({ data }) => setPromos(data?.filter(p => p.active) || []));
+    PromosApi.getAll().then(({ data }) =>
+      setPromos((data || []).filter(p => p.active))
+    );
   }, []);
 
   return (
-    <div className="p-6">
+    <div>
       <h2 className="text-2xl mb-4 font-bold text-pink-600">Promotions</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -17,7 +19,7 @@ export default function PromosList() {
           <div key={p.id} className="border p-4 bg-pink-50 rounded shadow">
             <b>{p.title}</b>
             <p>-{p.discount}%</p>
-            <p>Jusqu'à {p.valid_until}</p>
+            <p className="text-sm">Jusqu'à {p.valid_until}</p>
           </div>
         ))}
       </div>
