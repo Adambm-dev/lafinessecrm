@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { AppointmentsApi } from "../api/appointmentsApi";
 
 export default function ChartAppointments() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any[]>([]);
 
   useEffect(() => {
     AppointmentsApi.getAll().then(({ data }) => {
