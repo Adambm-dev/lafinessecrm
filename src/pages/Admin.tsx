@@ -18,11 +18,12 @@ export default function Admin() {
         .single();
 
       if (profile?.role !== "admin") return navigate("/");
-
       setIsAllowed(true);
     });
   }, []);
 
-  if (isAllowed === null) return <p className="p-10 text-center">Chargement...</p>;
+  if (isAllowed === null) 
+    return <p className="text-center p-10">Chargement...</p>;
+
   return <AdminTabs />;
 }
