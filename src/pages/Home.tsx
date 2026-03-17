@@ -4,7 +4,7 @@ import AppointmentForm from "../components/client/AppointmentForm";
 
 export default function Home() {
   return (
-    <div>
+    <div className="p-6 space-y-8">
       <ServicesList />
       <PromosList />
       <AppointmentForm />
