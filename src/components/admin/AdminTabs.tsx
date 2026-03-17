@@ -3,6 +3,8 @@ import ServicesAdmin from "./ServicesAdmin";
 import PromosAdmin from "./PromosAdmin";
 import StockAdmin from "./StockAdmin";
 import AppointmentsAdmin from "./AppointmentsAdmin";
+import DashboardCards from "../../dashboard/DashboardCards";
+import ChartAppointments from "../../dashboard/ChartAppointments";
 
 export default function AdminTabs() {
   const [tab, setTab] = useState("appointments");
@@ -20,7 +22,9 @@ export default function AdminTabs() {
           </button>
         ))}
       </div>
-
+<button onClick={() => setTab("dashboard")} ...>
+  Dashboard
+</button>
       {tab === "appointments" && <AppointmentsAdmin />}
       {tab === "services" && <ServicesAdmin />}
       {tab === "promos" && <PromosAdmin />}
@@ -28,3 +32,9 @@ export default function AdminTabs() {
     </div>
   );
 }
+{tab === "dashboard" && (
+  <div>
+    <DashboardCards />
+    <ChartAppointments />
+  </div>
+)}
