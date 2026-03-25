@@ -347,7 +347,7 @@ function ClientHome({setPage}) {
             L'Art de la<br/><em style={{color:C.roseGold}}>Beauté Raffinée</em>
           </h1>
           <p style={{color:'rgba(255,255,255,.55)',fontSize:'1.05rem',marginBottom:'2.5rem',lineHeight:1.7}}>
-            Salon de beauté haut de gamme à La Marsa.<br/>
+            Salon de beauté haut de gamme au Jardin El Manzah2.<br/>
             Prenez soin de vous avec nos expertes.
           </p>
           <div style={{display:'flex',gap:'1rem',justifyContent:'center',flexWrap:'wrap'}}>
@@ -364,7 +364,7 @@ function ClientHome({setPage}) {
       {/* Stats bar */}
       <div style={{background:C.blush,borderBottom:`1px solid ${C.border}`}}>
         <div style={{maxWidth:1100,margin:'0 auto',padding:'1.25rem 1.5rem',display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1rem',textAlign:'center'}}>
-          {[['500+','Clientes satisfaites'],['10','Prestations signatures'],['5★','Note moyenne'],['La Marsa','Tunis']].map(([v,l])=>(
+          {[['500+','Clientes satisfaites'],['10','Prestations signatures'],['5★','Note moyenne'],['Jardin El Manzah 2','Tunis']].map(([v,l])=>(
             <div key={l}>
               <div style={{fontFamily:FONTS.serif,fontSize:'1.5rem',color:C.mauve,fontWeight:600}}>{v}</div>
               <div style={{fontSize:'.75rem',color:C.gray}}>{l}</div>
@@ -902,13 +902,14 @@ function ClientFooter() {
           <div style={{width:28,height:28,borderRadius:8,background:`linear-gradient(135deg,${C.roseGold},${C.mauve})`,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:FONTS.serif,fontSize:'.85rem',color:'white'}}>𝓕</div>
           <div>
             <div style={{fontFamily:FONTS.serif,fontSize:'.95rem',color:C.white}}>La Finesse by Nourhen</div>
-            <div style={{fontSize:'.65rem',textTransform:'uppercase',letterSpacing:'.1em'}}>Salon de beauté · La Marsa, Tunis</div>
+            <div style={{fontSize:'.65rem',textTransform:'uppercase',letterSpacing:'.1em'}}>Salon de beauté · Jardin El Manzah 2, Tunis</div>
           </div>
         </div>
         <div style={{fontSize:'.75rem',textAlign:'right'}}>
-          <div>📞 +216 XX XXX XXX</div>
-          <div>📍 La Marsa, Tunis, Tunisie</div>
-          <div>🕐 Lun–Sam : 09:00–19:00</div>
+          <div>📞 +216 52 39 39 56</div>
+          <div>📍 Jardin El Manzah 2, Tunis, Tunisie</div>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3192.521686329257!2d10.123899675282651!3d36.85392987223182!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd330003dfc9bd%3A0x158d85fe7404ce98!2sLa%20finesse%20by%20Nourhen!5e0!3m2!1sfr!2stn!4v1774427177990!5m2!1sfr!2stn" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div>🕐 Lun–Dim : 10:00–20:00</div>
         </div>
       </div>
     </footer>
