@@ -908,7 +908,17 @@ function ClientFooter() {
         <div style={{fontSize:'.75rem',textAlign:'right'}}>
           <div>📞 +216 52 39 39 56</div>
           <div>📍 Jardin El Manzah 2, Tunis, Tunisie</div>
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3192.521686329257!2d10.123899675282651!3d36.85392987223182!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd330003dfc9bd%3A0x158d85fe7404ce98!2sLa%20finesse%20by%20Nourhen!5e0!3m2!1sfr!2stn!4v1774427177990!5m2!1sfr!2stn" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div id="googleMap" style="width:100%;height:400px;"></div>
+          <script>
+function myMap() {
+var mapProp= {
+  center:new google.maps.LatLng(51.508742,-0.120850),
+  zoom:5,
+};
+var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+}
+</script>
+<script src="https://maps.app.goo.gl/U9DmYSnbLjMkuaiY6"></script>
           <div>🕐 Lun–Dim : 10:00–20:00</div>
         </div>
       </div>
