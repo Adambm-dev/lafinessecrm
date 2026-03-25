@@ -1,4 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+// ═══════════════════════════════════════════════════════════════
+// SUPABASE CONFIGURATION
+// ═══════════════════════════════════════════════════════════════
+const SUPABASE_URL = 'https://uksqkzxjnxhrrotlubxl.supabase.co'; // Replace with your URL
+const SUPABASE_ANON_KEY = 'sb_publishable_NpMmJrjk60qQ1T4mosVi_w_e_uwO4NO'; // Replace with your Anon Key
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ═══════════════════════════════════════════════════════════════
 // DESIGN TOKENS
@@ -45,16 +53,16 @@ const MOCK_CLIENTS = [
 ];
 
 const MOCK_APPOINTMENTS = [
-  { id:1, clientId:1, serviceId:1, date:fmt(T), time:'09:00', status:'confirmed', notes:'', price:85 },
-  { id:2, clientId:3, serviceId:8, date:fmt(T), time:'10:30', status:'confirmed', notes:'Mariage samedi.', price:130 },
-  { id:3, clientId:5, serviceId:7, date:fmt(T), time:'14:00', status:'scheduled', notes:'', price:75 },
-  { id:4, clientId:2, serviceId:3, date:fmt(addD(T,1)), time:'11:00', status:'scheduled', notes:'', price:50 },
-  { id:5, clientId:4, serviceId:6, date:fmt(addD(T,1)), time:'15:30', status:'scheduled', notes:'', price:40 },
-  { id:6, clientId:1, serviceId:4, date:fmt(addD(T,-1)), time:'10:00', status:'completed', notes:'', price:60 },
-  { id:7, clientId:3, serviceId:5, date:fmt(addD(T,-2)), time:'09:30', status:'completed', notes:'', price:20 },
-  { id:8, clientId:5, serviceId:9, date:fmt(addD(T,-3)), time:'13:00', status:'completed', notes:'', price:95 },
-  { id:9, clientId:2, serviceId:10, date:fmt(addD(T,-5)), time:'11:00', status:'completed', notes:'', price:35 },
-  { id:10, clientId:4, serviceId:1, date:fmt(addD(T,-6)), time:'14:00', status:'cancelled', notes:'', price:85 },
+  { id:1, client_id:1, service_id:1, date:fmt(T), time:'09:00', status:'confirmed', notes:'', price:85 },
+  { id:2, client_id:3, service_id:8, date:fmt(T), time:'10:30', status:'confirmed', notes:'Mariage samedi.', price:130 },
+  { id:3, client_id:5, service_id:7, date:fmt(T), time:'14:00', status:'scheduled', notes:'', price:75 },
+  { id:4, client_id:2, service_id:3, date:fmt(addD(T,1)), time:'11:00', status:'scheduled', notes:'', price:50 },
+  { id:5, client_id:4, service_id:6, date:fmt(addD(T,1)), time:'15:30', status:'scheduled', notes:'', price:40 },
+  { id:6, client_id:1, service_id:4, date:fmt(addD(T,-1)), time:'10:00', status:'completed', notes:'', price:60 },
+  { id:7, client_id:3, service_id:5, date:fmt(addD(T,-2)), time:'09:30', status:'completed', notes:'', price:20 },
+  { id:8, client_id:5, service_id:9, date:fmt(addD(T,-3)), time:'13:00', status:'completed', notes:'', price:95 },
+  { id:9, client_id:2, service_id:10, date:fmt(addD(T,-5)), time:'11:00', status:'completed', notes:'', price:35 },
+  { id:10, client_id:4, service_id:1, date:fmt(addD(T,-6)), time:'14:00', status:'cancelled', notes:'', price:85 },
 ];
 
 const MOCK_PROMOS = [
@@ -83,61 +91,175 @@ function AppProvider({ children }) {
 
   const [clients, setClients] = useState(() => ls('lf_clients', MOCK_CLIENTS));
   const [appointments, setAppointments] = useState(() => ls('lf_appointments', MOCK_APPOINTMENTS));
+
+  // Initial Data Fetching from Supabase
+  useEffect(() => {
+    const fetchData = async () => {
+      // Fetch Clients
+      const { data: cData, error: cErr } = await supabase.from('users').select('*').eq('role', 'client');
+      if (!cErr && cData) setClients(cData);
+
+      // Fetch Appointments
+      const { data: aData, error: aErr } = await supabase.from('appointments').select('*');
+      if (!aErr && aData) setAppointments(aData);
+    };
+    fetchData();
+  }, []);
   const [services] = useState(MOCK_SERVICES);
   const [promos] = useState(MOCK_PROMOS);
   const [news] = useState(NEWS);
 
-  useEffect(() => { localStorage.setItem('lf_clients', JSON.stringify(clients)); }, [clients]);
-  useEffect(() => { localStorage.setItem('lf_appointments', JSON.stringify(appointments)); }, [appointments]);
+  // Data no longer synced to localStorage automatically as we use Supabase
+  // useEffect(() => { localStorage.setItem('lf_clients', JSON.stringify(clients)); }, [clients]);
+  // useEffect(() => { localStorage.setItem('lf_appointments', JSON.stringify(appointments)); }, [appointments]);
 
   // Admin auth
-  const adminLogin = (email, pass) => {
-    if (email==='admin@lafinesse.tn' && pass==='finesse2024') {
-      const u={name:'Nourhen',email,role:'admin'};
-      setAdminUser(u); localStorage.setItem('lf_admin',JSON.stringify(u));
+  const adminLogin = async (email, pass) => {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', email)
+        .eq('password', pass)
+        .eq('role', 'admin')
+        .single();
+
+      if (error || !data) return { ok: false, error: 'Identifiants incorrects.' };
+
+      const u = { name: data.full_name, email: data.email, role: 'admin' };
+      setAdminUser(u);
+      localStorage.setItem('lf_admin', JSON.stringify(u));
       setAppMode('admin');
-      return {ok:true};
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, error: 'Erreur de connexion.' };
     }
-    return {ok:false,error:'Identifiants incorrects.'};
   };
   const adminLogout = () => { setAdminUser(null); localStorage.removeItem('lf_admin'); setAppMode('client'); };
 
   // Client auth
-  const clientLogin = (email, pass) => {
-    const c = clients.find(cl=>cl.email===email && cl.password===pass);
-    if (c) { setClientUser(c); localStorage.setItem('lf_client_user',JSON.stringify(c)); return {ok:true,client:c}; }
-    return {ok:false,error:'Email ou mot de passe incorrect.'};
+  const clientLogin = async (email, pass) => {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', email)
+        .eq('password', pass)
+        .eq('role', 'client')
+        .single();
+
+      if (error || !data) return { ok: false, error: 'Email ou mot de passe incorrect.' };
+      
+      const c = { ...data, firstName: data.full_name.split(' ')[0], lastName: data.full_name.split(' ').slice(1).join(' ') };
+      setClientUser(c);
+      localStorage.setItem('lf_client_user', JSON.stringify(c));
+      return { ok: true, client: c };
+    } catch (err) {
+      return { ok: false, error: 'Erreur de connexion.' };
+    }
   };
-  const clientRegister = (data) => {
-    if (clients.find(c=>c.email===data.email)) return {ok:false,error:'Email déjà utilisé.'};
-    const newC = {...data,id:Date.now(),totalSpent:0,visits:0,points:0,createdAt:fmt(T)};
-    setClients(p=>[...p,newC]);
-    setClientUser(newC); localStorage.setItem('lf_client_user',JSON.stringify(newC));
-    return {ok:true,client:newC};
+
+  const clientRegister = async (data) => {
+    try {
+      // Check if email exists
+      const { data: existing } = await supabase.from('users').select('id').eq('email', data.email).single();
+      if (existing) return { ok: false, error: 'Email déjà utilisé.' };
+
+      const { data: newU, error } = await supabase
+        .from('users')
+        .insert([{
+          email: data.email,
+          full_name: `${data.firstName} ${data.lastName}`,
+          password: data.password,
+          role: 'client'
+        }])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      const c = { ...newU, firstName: data.firstName, lastName: data.lastName };
+      setClientUser(c);
+      localStorage.setItem('lf_client_user', JSON.stringify(c));
+      return { ok: true, client: c };
+    } catch (err) {
+      return { ok: false, error: 'Erreur lors de l\'inscription.' };
+    }
   };
   const clientLogout = () => { setClientUser(null); localStorage.removeItem('lf_client_user'); };
 
   // Appointments
-  const addAppointment = (d) => {
-    const svc=services.find(s=>s.id===Number(d.serviceId));
-    const apt={...d,id:Date.now(),status:'scheduled',price:svc?.price||0,serviceId:Number(d.serviceId),clientId:Number(d.clientId)};
-    setAppointments(p=>[apt,...p]);
-    setClients(p=>p.map(c=>c.id===Number(d.clientId)?{...c,visits:c.visits+1}:c));
-    return apt;
+  const addAppointment = async (d) => {
+    const svc = services.find(s => s.id === Number(d.serviceId));
+    const aptData = {
+      client_id: d.clientId,
+      service_id: Number(d.serviceId),
+      date: d.date,
+      time: d.time,
+      status: 'scheduled',
+      price: svc?.price || 0,
+      notes: d.notes
+    };
+
+    const { data, error } = await supabase.from('appointments').insert([aptData]).select().single();
+    if (!error && data) {
+      setAppointments(p => [data, ...p]);
+      // Update local client visits (could also be done via fetching again)
+      setClients(p => p.map(c => c.id === d.clientId ? { ...c, visits: (c.visits || 0) + 1 } : c));
+      return data;
+    }
+    return null;
   };
-  const updateAppointment = (id,d) => {
-    setAppointments(p=>p.map(a=>a.id===id?{...a,...d}:a));
-    if (d.status==='completed') {
-      const apt=appointments.find(a=>a.id===id);
-      if(apt) setClients(p=>p.map(c=>c.id===apt.clientId?{...c,totalSpent:c.totalSpent+apt.price,points:c.points+apt.price}:c));
+
+  const updateAppointment = async (id, d) => {
+    const { error } = await supabase.from('appointments').update(d).eq('id', id);
+    if (!error) {
+      setAppointments(p => p.map(a => a.id === id ? { ...a, ...d } : a));
+      if (d.status === 'completed') {
+        const apt = appointments.find(a => a.id === id);
+        if (apt) {
+          // Update client stats in DB (ideally via function or trigger)
+          setClients(p => p.map(c => c.id === apt.client_id ? { ...c, totalSpent: (c.totalSpent || 0) + apt.price, points: (c.points || 0) + apt.price } : c));
+        }
+      }
     }
   };
-  const deleteAppointment = (id) => setAppointments(p=>p.filter(a=>a.id!==id));
+
+  const deleteAppointment = async (id) => {
+    const { error } = await supabase.from('appointments').delete().eq('id', id);
+    if (!error) setAppointments(p => p.filter(a => a.id !== id));
+  };
 
   // Clients CRUD (admin)
-  const addClient = (d) => { const c={...d,id:Date.now(),totalSpent:0,visits:0,points:0,createdAt:fmt(T),password:'client123'}; setClients(p=>[c,...p]); return c; };
-  const updateClient = (id,d) => setClients(p=>p.map(c=>c.id===id?{...c,...d}:c));
-  const deleteClient = (id) => setClients(p=>p.filter(c=>c.id!==id));
+  const addClient = async (d) => {
+    const { data, error } = await supabase.from('users').insert([{
+      email: d.email,
+      full_name: `${d.firstName} ${d.lastName}`,
+      password: 'client123',
+      role: 'client'
+    }]).select().single();
+
+    if (!error && data) {
+      const c = { ...data, firstName: d.firstName, lastName: d.lastName };
+      setClients(p => [c, ...p]);
+      return c;
+    }
+    return null;
+  };
+
+  const updateClient = async (id, d) => {
+    const updateData = {};
+    if (d.firstName || d.lastName) updateData.full_name = `${d.firstName || ''} ${d.lastName || ''}`.trim();
+    if (d.email) updateData.email = d.email;
+
+    const { error } = await supabase.from('users').update(updateData).eq('id', id);
+    if (!error) setClients(p => p.map(c => c.id === id ? { ...c, ...d } : c));
+  };
+
+  const deleteClient = async (id) => {
+    const { error } = await supabase.from('users').delete().eq('id', id);
+    if (!error) setClients(p => p.filter(c => c.id !== id));
+  };
   const getClient = (id) => clients.find(c=>c.id===id);
   const getService = (id) => services.find(s=>s.id===id);
 
@@ -497,7 +619,7 @@ function BookingFlow({setPage}) {
 
   const confirm = () => {
     if(!clientUser) { setPage('client-login'); return; }
-    addAppointment({clientId:clientUser.id,serviceId:sel.service.id,date:sel.date,time:sel.time,notes:sel.notes});
+    addAppointment({client_id:clientUser.id,service_id:sel.service.id,date:sel.date,time:sel.time,notes:sel.notes});
     setStep(4);
   };
 
@@ -657,7 +779,7 @@ function ClientAccount({setPage}) {
     </div>
   );
 
-  const myApts = appointments.filter(a=>a.clientId===clientUser.id);
+  const myApts = appointments.filter(a=>a.client_id===clientUser.id);
   const upcoming = myApts.filter(a=>a.date>=todayStr&&!['completed','cancelled'].includes(a.status)).sort((a,b)=>a.date.localeCompare(b.date));
   const past = myApts.filter(a=>a.status==='completed'||a.date<todayStr).sort((a,b)=>b.date.localeCompare(a.date));
   const getService = id=>services.find(s=>s.id===id);
@@ -665,7 +787,7 @@ function ClientAccount({setPage}) {
   const cancelApt = (id)=>{ if(window.confirm('Annuler ce rendez-vous ?')) updateAppointment(id,{status:'cancelled'}); };
 
   const AptCard = ({apt,canCancel}) => {
-    const svc=getService(apt.serviceId);
+    const svc=getService(apt.service_id);
     return (
       <div style={{background:C.white,border:`1px solid ${C.border}`,borderRadius:12,padding:'1.1rem',display:'flex',gap:'1rem',alignItems:'center'}}>
         <div style={{width:48,height:48,borderRadius:10,background:`${svc?.color||C.roseGold}18`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.2rem',flexShrink:0}}>
@@ -1056,7 +1178,7 @@ function AdminDashboard({setPage}) {
             <Btn variant="secondary" sm onClick={()=>setPage('agenda')}>Voir agenda →</Btn>
           </div>
           {upcoming.length===0?<div style={{textAlign:'center',padding:'2rem',color:C.gray,fontSize:'.875rem'}}>Aucun rendez-vous.</div>
-          :upcoming.map(apt=>{const cl=gc(apt.clientId);const sv=gs(apt.serviceId);const isToday=apt.date===todayStr;return(
+          :upcoming.map(apt=>{const cl=gc(apt.client_id);const sv=gs(apt.service_id);const isToday=apt.date===todayStr;return(
             <div key={apt.id} style={{display:'flex',gap:'.9rem',alignItems:'center',padding:'.7rem .9rem',borderRadius:8,background:isToday?C.blush:C.white,border:`1px solid ${isToday?C.border:'transparent'}`,marginBottom:'.5rem'}}>
               <div style={{minWidth:52,textAlign:'center'}}>
                 <div style={{fontFamily:FONTS.serif,fontSize:'.95rem',fontWeight:600,color:C.mauve}}>{apt.time}</div>
